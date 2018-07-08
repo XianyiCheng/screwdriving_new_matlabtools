@@ -260,8 +260,8 @@ classdef RunData  < matlab.mixin.Copyable
             %legend(p2, {'X','Y','Z'});
             
             linkaxes(obj.dispdata.plots.axes, 'x');
-            %saveas(obj.dispdata.figure, strcat(directory,'/',obj.bagname,'.jpg'))
-            %close;
+            saveas(obj.dispdata.figure, strcat(directory,'/',obj.bagname,'.jpg'))
+            close;
        end
         
        function tip = screwdrivertip(obj)
@@ -281,7 +281,7 @@ classdef RunData  < matlab.mixin.Copyable
            z0 = min(robot_z((pm-pm0).^2< 0.005^2));
            b =  -k*pm0;
            
-           dz = (k*pm + b) * cos(obj.angular_error(2));
+           dz = (k*pm + b) * cos(obj.angular_error(1));
            
            tip.z = robot_z - dz - hole_z + tip_offset;
        end
