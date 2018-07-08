@@ -1,7 +1,12 @@
 function bagdataExtraction(bagdir, bagpath, savedir)
 
 fprintf(strcat('loading from: ',bagdir,'./',bagpath, '\n'));
-bag = rosbag(strcat(bagdir, '/',bagpath));
+try 
+    bag = rosbag(strcat(bagdir, '/',bagpath));
+catch
+    fprintf(strcat(bagdir,'./',bagpath,' is broken!','\n'));
+    return
+end
 
 bagname = bagpath(1:end-4);
 
