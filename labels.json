@@ -1,0 +1,11 @@
+{
+    "globals": 
+    {
+        "Result": ["success", "crossthread", "noscrew", "no_hole_found", "stripped", "partial", "stripped_no_engage"]
+    },
+    "timeseries":
+    {
+        "labels": ["approach", "hole_finding", "initial_mating", "rundown", "tightening", "no_screw_spinning", "screw_fallen", "stripped_tightening", "stripped_engaging", "stripped_rundown", "complete", "NA"]
+    }
+}
+    
