@@ -39,6 +39,8 @@ classdef RunData  < matlab.mixin.Copyable
             wrench_data = csvread(strcat(obj.bagdir,'/',obj.bagname,'_ft.csv'),1,0);
             obj.wrench.time = wrench_data(:,1);
             obj.wrench.force = wrench_data(:,2:4);
+            % torque: the torque on the ft sensor
+            % torque_trans: compute the actual torque on the screwdriver tip
             obj.wrench.torque = wrench_data(:,5:7);
             obj.wrench.torque_trans = [obj.wrench.torque(:,1) + obj.wrench.force(:,2)*l, obj.wrench.torque(:,2) - obj.wrench.force(:,1)*l, obj.wrench.torque(:,3)];
             
@@ -271,7 +273,8 @@ classdef RunData  < matlab.mixin.Copyable
            %b = -11.5132; 
            pm =obj.screwdriver.potentiometer;
            tip.time = obj.screwdriver.time;
-           robot_z  = interp1(obj.robot.time(1:5:end), obj.robot.position(1:5:end,3), obj.screwdriver.time);
+           [robot_unique_time, robot_unique_index] = unique(obj.robot.time);
+           robot_z  = interp1(robot_unique_time, obj.robot.position(robot_unique_index,3), obj.screwdriver.time);
            q = [0 0 1 0];
            fq = obj.robot.quaternions(floor(size(obj.robot.quaternions,1)/2),:);
            true_location = obj.hole_location - (pinv(quat2rotm(q))*[-94.60 0 147.87+4]')' + (pinv(quat2rotm(fq))*[-94.60 0 147.87+4]')';

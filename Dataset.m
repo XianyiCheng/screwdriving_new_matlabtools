@@ -19,11 +19,12 @@ classdef Dataset < matlab.mixin.Copyable
 
         end
         
-        function load(obj,index)
+        function rundata = load(obj,index)
             obj.cur_index = index;
             runname = obj.files(obj.cur_index).name(1:end-4);
             obj.cur_data = RunData(obj.directory,runname);
             obj.cur_data.label.context = obj.context;
+            rundata = obj.cur_data;
         end
         
         function labeldata(obj, index)
