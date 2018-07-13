@@ -144,59 +144,6 @@ classdef RunData  < matlab.mixin.Copyable
             
         end
         
-        function view(obj)
-            line_width = 2;
-            obj.dispdata.figure = figure('Name', obj.bagname, 'NumberTitle', 'off', ...
-                'Units', 'normalized', 'OuterPosition', [0 0 1 1]);
-            
-            if ~isempty(obj.image)
-                obj.dispdata.image.axes = subplot(3,3,1);
-                obj.dispdata.image.image = imshow(obj.image.data{1});
-            end
-            
-            obj.dispdata.plots.axes = [];
-            
-            obj.dispdata.plots.axes(1) = subplot(3,3,2);
-            plot(obj.screwdriver.time, obj.screwdriver.current, 'LineWidth', line_width);
-            %hold on
-            %plot(obj.wrench.time, obj.wrench.torque(3,:), 'LineWidth', BagData.line_width);
-            xlim([0 obj.duration]);
-            xlabel('Time (s)');
-            ylabel('Current (A)');
-            
-            obj.dispdata.plots.axes(2) = subplot(3,3,3);
-            plot(obj.screwdriver.time, obj.screwdriver.velocity, 'LineWidth', line_width);
-            xlim([0 obj.duration]);
-            xlabel('Time (s)');
-            ylabel('Velocity (rpm)');
-            
-            obj.dispdata.plots.axes(3) = subplot(3,3,4);
-            plot(obj.screwdriver.time, obj.screwdriver.potentiometer, 'LineWidth', line_width);
-            xlim([0 obj.duration]);
-            ylim([0 1]);
-            xlabel('Time (s)');
-            ylabel('Potentiometer');
-            
-            obj.dispdata.plots.axes(4) = subplot(3,3,5);
-            p1 = plot(obj.wrench.time, obj.wrench.torque, 'LineWidth', line_width);
-            xlim([0 obj.duration]);
-            xlabel('Time (s)');
-            ylabel('Torque(Nm)');
-            legend(p1,{'X','Y','Z'});
-            
-            obj.dispdata.plots.axes(5) = subplot(3,3,6);
-            p2 = plot(obj.wrench.time, obj.wrench.force, 'LineWidth', line_width);
-            xlim([0 obj.duration]);
-            xlabel('Time (s)');
-            ylabel('Force (N)');
-            legend(p2, {'X','Y','Z'});
-            
-            linkaxes(obj.dispdata.plots.axes, 'x');
-            
-            context = CallbackContext(obj);
-            set(gcf, 'WindowButtonMotionFcn', @context.moveCallback);     
-        end
-        
         function savelabel(obj)
             obj.label.save(strcat(obj.bagdir,'/',obj.bagname,'_label.json'));
         end
