@@ -121,24 +121,25 @@ classdef RunData  < matlab.mixin.Copyable
             plot(tip.time, tip.z, 'LineWidth', line_width);
             xlim([0 obj.duration]);
             ylim([min(tip.z)-20, max(tip.z)+ 20]);
+            %plot(obj.robot.time, obj.robot.position(:,3))
             xlabel('Time (s)');
             ylabel('Screwdriver Tip Distance');
             
             
             
             obj.dispdata.plots.axes(4) = subplot(3,3,5);
-            p1 = plot(obj.wrench.time, obj.wrench.torque, 'LineWidth', line_width);
+            p1 = plot(obj.wrench.time, obj.wrench.torque_trans, 'LineWidth', line_width);
             xlim([0 obj.duration]);
             xlabel('Time (s)');
             ylabel('Torque(Nm)');
-            legend(p1,{'X','Y','Z'});
+            %legend(p1,{'X','Y','Z'});
             
             obj.dispdata.plots.axes(5) = subplot(3,3,6);
             p2 = plot(obj.wrench.time, obj.wrench.force, 'LineWidth', line_width);
             xlim([0 obj.duration]);
             xlabel('Time (s)');
             ylabel('Force (N)');
-            legend(p2, {'X','Y','Z'});
+            %legend(p2, {'X','Y','Z'});
             
             linkaxes(obj.dispdata.plots.axes, 'x');
             
@@ -149,22 +150,21 @@ classdef RunData  < matlab.mixin.Copyable
         end
         
        function savefig(obj,directory)
-            line_width = 1;
+            line_width = 1.5;
             obj.dispdata.figure = figure('Name', obj.bagname, 'NumberTitle', 'off', ...
                 'Units', 'normalized', 'OuterPosition', [0 0 1 1]);
             
-            obj.dispdata.image.axes = subplot(2,3,1);
+            obj.dispdata.image.axes = subplot(3,3,1);
             if ~isempty(obj.image)    
                 obj.dispdata.image.image = imshow(obj.image.data{30}, 'Border','tight');
             end
             discrip = {strcat(replace(obj.bagdir(end-5:end),'_','\_'),'/', replace(obj.bagname,'_','\_'));...
-                strcat('position error: ', string(obj.position_error(1)),', ', string(obj.position_error(2)));...
-                strcat('angular error: ', string(obj.angular_error(1)),', ',string(obj.angular_error(2)))};
+                strcat('pos err: ', string(obj.position_error(1)),', ', string(obj.position_error(2)),'; angle err: ', string(obj.angular_error(1)),', ',string(obj.angular_error(2)))};
             %obj.dispdata.text = text(0,-50,discrip);
             
             obj.dispdata.plots.axes = [];
-            xlabel(discrip, 'FontSize',14);
-            obj.dispdata.plots.axes(1) = subplot(2,3,2);
+            xlabel(discrip, 'FontSize',12);
+            obj.dispdata.plots.axes(1) = subplot(3,3,2);
             plot(obj.screwdriver.time, obj.screwdriver.current, 'LineWidth', line_width);
             %hold on
             %plot(obj.wrench.time, obj.wrench.torque(3,:), 'LineWidth', BagData.line_width);
@@ -172,7 +172,7 @@ classdef RunData  < matlab.mixin.Copyable
             xlabel('Time (s)');
             ylabel('Current (A)');
             
-            obj.dispdata.plots.axes(2) = subplot(2,3,3);
+            obj.dispdata.plots.axes(2) = subplot(3,3,3);
             plot(obj.screwdriver.time, obj.screwdriver.velocity, 'LineWidth', line_width);
             xlim([0 obj.duration]);
             xlabel('Time (s)');
@@ -187,26 +187,42 @@ classdef RunData  < matlab.mixin.Copyable
             ylabel('Potentiometer');
             %}
             tip = obj.screwdrivertip();
-            obj.dispdata.plots.axes(3) = subplot(2,3,4);
+            obj.dispdata.plots.axes(4) = subplot(3,3,7);
             plot(tip.time, tip.z, 'LineWidth', line_width);
             xlim([0 obj.duration]);
             ylim([min(tip.z)-20, max(tip.z)+ 20]);
             xlabel('Time (s)');
-            ylabel('Screwdriver Tip Distance');
+            ylabel('screwdriver tip distance');
             
-            obj.dispdata.plots.axes(4) = subplot(2,3,5);
+            obj.dispdata.plots.axes(5) = subplot(3,3,4);
             p1 = plot(obj.wrench.time, obj.wrench.torque_trans, 'LineWidth', line_width);
             xlim([0 obj.duration]);
             xlabel('Time (s)');
             ylabel('Torque(Nm)');
             %legend(p1,{'X','Y','Z'});
             
-            obj.dispdata.plots.axes(5) = subplot(2,3,6);
+            obj.dispdata.plots.axes(6) = subplot(3,3,5);
             p2 = plot(obj.wrench.time, obj.wrench.force, 'LineWidth', line_width);
             xlim([0 obj.duration]);
             xlabel('Time (s)');
             ylabel('Force (N)');
             %legend(p2, {'X','Y','Z'});
+            
+            obj.dispdata.plots.axes(3) = subplot(3,3,6);
+            plot(obj.screwdriver.time, obj.screwdriver.position, 'LineWidth', line_width);
+            xlabel('Time (s)');
+            ylabel('motor encoder');
+            
+            obj.dispdata.plots.axes(7) = subplot(3,3,8);
+            plot(obj.screwdriver.time, obj.screwdriver.potentiometer, 'LineWidth', line_width);
+            xlabel('Time (s)');
+            ylabel('linear potentiometer');
+            
+            obj.dispdata.plots.axes(8) = subplot(3,3,9);
+            plot(obj.robot.time, obj.robot.position(:,3), 'LineWidth', line_width);
+            xlabel('Time (s)');
+            ylabel('robot z');
+            
             
             linkaxes(obj.dispdata.plots.axes, 'x');
             saveas(obj.dispdata.figure, strcat(directory,'/',obj.bagname,'.jpg'))
