@@ -1,7 +1,7 @@
 function rundataExtraction(directory, savedirectory)
 
-bagdirs = dir(directory);
-for k = 5:numel(bagdirs)
+bagdirs = dir(fullfile(directory,'*run*'));
+for k = 1:numel(bagdirs)
     bagdir = strcat(directory,'/',bagdirs(k).name);
     savedir = strcat(savedirectory, '/', bagdirs(k).name);
     mkdir(savedir);
